@@ -1,0 +1,41 @@
+project_name: "simple_project"
+task_name: "CatBoost_iters_200_lr_01"
+tags: 
+ - RandomForest
+configuration_path: "configs/train_config.yml"
+s3_data_path: "s3://gisp/rosatom/ml_example/data"
+output_data_folder: "./"
+input_data_path: "data/raw/heart.csv"
+splitting_params:
+  validate_size: 0.1
+  random_state: 3
+feature_params:
+  categorical_columns:
+    - "Sex" 
+    - "ChestPainType"
+    - "FastingBS"
+    - "RestingECG"
+    - "ExerciseAngina"
+    - "ST_Slope"
+  numerical_columns:
+    - "Age"
+    - "RestingBP"
+    - "Cholesterol"
+    - "MaxHR"
+    - "Oldpeak"
+  target_column: "HeartDisease"
+training_params:
+  model_type: "CatBoost"
+  LogisticRegressionArgs:
+    random_state: 22
+  RandomForestArgs:
+    random_state: 42
+    n_estimators: 200
+    max_depth: 10
+  CatBoostArgs:
+    iterations: 1000
+    learning_rate: 0.1
+    depth: 6
+metric_file_path: "models/metrics.json"
+local_model_save_path: "models/baseline_RF.pkl"
+model_s3_path: "s3://gisp/rosatom/ml_example/model/baseline_CB.pkl"

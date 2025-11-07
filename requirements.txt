@@ -1,0 +1,10 @@
+click==7.1.2
+python-dotenv>=0.5.1
+scikit-learn
+dataclasses==0.6
+pyyaml==5.3
+clearml==1.17.1
+marshmallow-dataclass
+pandas
+s3cmd
+catboost
