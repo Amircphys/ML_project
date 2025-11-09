@@ -2,19 +2,15 @@ import os
 from fastapi import FastAPI
 import uvicorn
 import logging
-from typing import Dict, List, Union
+from typing import List, Union
 from pydantic import conlist, BaseModel
 import pandas as pd
 import joblib
 from dotenv import load_dotenv
 
-from src.features import make_features
-from src.models import model_predict
 
 load_dotenv()
-
 app = FastAPI()
-
 logger = logging.Logger(name=__name__)
 
 
@@ -33,7 +29,7 @@ transformer = None
 
 
 def predict_probs(features, model) -> List[float]:
-    probs = model_predict(features=features, model=model, predict_proba=True)[:, 1]
+    probs = model.predict_proba(features)[:, 1]
     probs = (probs * 100).tolist()
     probs = [round(x, 2) for x in probs]
     return probs
@@ -46,7 +42,7 @@ def make_predict(
     df = pd.DataFrame(data, columns=features)
     if df.empty:
         return HeartDisease(ids=[], probs=[])
-    features = make_features(df, transformer)
+    features = transformer.transform(df)
     probs = predict_probs(features=features, model=model)
     return HeartDisease(ids=df["id"].tolist(), probs=probs)
 
@@ -55,10 +51,14 @@ def make_predict(
 def load_artefacts():
     global model
     global transformer
+
     model_path = os.getenv("MODEL_PATH")
     transformer_path = os.getenv("TRANSFORMER_PATH")
-    model = joblib.load(model_path)
-    transformer = joblib.load(transformer_path)
+    if not os.path.exists("./model.pkl"):
+        logger.info(f"Start load model from s3...")
+        os.system(f"s3cmd get {model_path} ./model.pkl")
+    model = joblib.load("./model.pkl")
+    transformer = joblib.load("./transformer.pkl")
     if model is None:
         logger.warning(f"Model is None object!!!")
     if transformer is None:
@@ -87,4 +87,4 @@ def predict(request: PersonParams):
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", reload=True)
+    uvicorn.run("main:app", reload=True, host="0.0.0.0", port=8000)

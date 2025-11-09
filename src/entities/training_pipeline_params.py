@@ -19,10 +19,11 @@ class TrainingPipelineParams:
     splitting_params: SplittingParams
     feature_params: FeatureParams
     training_params: TrainingParams
-    transformer_path: str
+    local_transformer_path: str
     metric_file_path: str
     local_model_save_path: str
-    model_s3_path: str
+    s3_path_model: str
+    s3_path_transformer: str
 
 
 TrainingPipelineParamsSchema = class_schema(TrainingPipelineParams)

@@ -1,5 +1,6 @@
 import os
 from typing import Union
+import joblib
 import pickle
 import numpy as np
 import pandas as pd
@@ -7,7 +8,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from catboost import CatBoostClassifier
 from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
-
+from sklearn.compose import ColumnTransformer
+from src.entities import TrainingPipelineParams
 
 sklearn_models = Union[LogisticRegression, RandomForestClassifier]
 
@@ -36,10 +38,17 @@ def evaluate_model(predict: list[float], target: list[float]) -> pd.DataFrame:
     )
 
 
-def save_model(
-    model: LogisticRegression, local_model_save_path: str, s3_model_path: str
+def save_artefacts(
+    model: LogisticRegression,
+    transformer: ColumnTransformer,
+    pipeline_params: TrainingPipelineParams,
 ):
-    with open(local_model_save_path, "wb") as save_file:
-        pickle.dump(model, save_file)
-    os.system(f"s3cmd put {local_model_save_path} {s3_model_path}")
+    joblib.dump(model, pipeline_params.local_model_save_path)
+    joblib.dump(transformer, pipeline_params.local_transformer_path)
+    os.system(
+        f"s3cmd put {pipeline_params.local_model_save_path} {pipeline_params.s3_path_model}"
+    )
+    os.system(
+        f"s3cmd put {pipeline_params.local_transformer_path} {pipeline_params.s3_path_transformer}"
+    )
     return model

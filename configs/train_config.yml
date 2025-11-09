@@ -36,7 +36,8 @@ training_params:
     iterations: 1000
     learning_rate: 0.1
     depth: 6
-transformer_path: "models/transformer.pkl"
+local_transformer_path: "models/transformer.pkl"
 metric_file_path: "models/metrics_LR.json"
 local_model_save_path: "models/baseline_LR.pkl"
-model_s3_path: "s3://gisp/rosatom/ml_example/model/baseline_LR.pkl"
+s3_path_model: "s3://gisp/rosatom/ml_example/model/baseline_LR.pkl"
+s3_path_transformer: "s3://gisp/rosatom/ml_example/model/transformer.pkl"

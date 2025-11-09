@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pandas
+numpy==2.3.4
+scikit-learn
+pytest
+s3cmd
+joblib
+dotenv
