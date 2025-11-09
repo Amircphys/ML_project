@@ -20,5 +20,8 @@ def train_model(features: np.array, target: np.array, training_params: TrainingP
     elif training_params.model_type == "CatBoost":
         model = CatBoostClassifier(**asdict(training_params.CatBoostArgs))
 
+    elif training_params.model_type == "LogisticRegression":
+        model = LogisticRegression(**asdict(training_params.LogisticRegressionArgs))
+
     model.fit(features, target)
     return model

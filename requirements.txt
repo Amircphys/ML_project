@@ -8,3 +8,9 @@ marshmallow-dataclass
 pandas
 s3cmd
 catboost
+fastapi
+uvicorn
+joblib==1.5.2
+pytest
+pytest-asyncio
+pytest-cov

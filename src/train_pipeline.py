@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import click
+import joblib
 from clearml import Task, OutputModel
 from dotenv import load_dotenv
 from src.data import read_data, split_train_validate_data, load_data_from_s3
@@ -12,6 +13,7 @@ from src.entities import (
 )
 from src.features import make_features, build_transformer, extract_target
 from src.models import train_model, model_predict, evaluate_model, save_model
+
 
 load_dotenv()
 
@@ -45,6 +47,7 @@ def train_pipeline(training_pipeline_params: TrainingPipelineParams):
     report_text(f"Start build transformer for features...")
     transformer = build_transformer(training_pipeline_params.feature_params)
     transformer.fit(df_train)
+    joblib.dump(transformer, training_pipeline_params.transformer_path)
     report_text(f"Pipeline for features was built and fitted!!!\n")
     report_text(f"Start make features...")
     train_features = make_features(df_train, transformer)
@@ -72,7 +75,12 @@ def train_pipeline(training_pipeline_params: TrainingPipelineParams):
         training_pipeline_params.model_s3_path,
     )
     # Create output model and connect it to the task
-    output_model = OutputModel(task=task)
+    output_model = OutputModel(
+        task=task,
+        name="baseline_LR",
+        framework="Scikit-learn",
+    )
+    # task=task, name='baseline_RF', weights_filename=model_file, framework='scikit-learn'
     output_model.update_weights(training_pipeline_params.local_model_save_path)
     report_text(
         f"Model saved locally at {training_pipeline_params.local_model_save_path} and to minio: {training_pipeline_params.model_s3_path}!!!\n"

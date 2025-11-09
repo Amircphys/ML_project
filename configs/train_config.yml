@@ -1,7 +1,7 @@
 project_name: "simple_project"
-task_name: "CatBoost_iters_200_lr_01"
+task_name: "LogReg"
 tags: 
- - RandomForest
+ - CB
 configuration_path: "configs/train_config.yml"
 s3_data_path: "s3://gisp/rosatom/ml_example/data"
 output_data_folder: "./"
@@ -25,7 +25,7 @@ feature_params:
     - "Oldpeak"
   target_column: "HeartDisease"
 training_params:
-  model_type: "CatBoost"
+  model_type: "LogisticRegression"
   LogisticRegressionArgs:
     random_state: 22
   RandomForestArgs:
@@ -36,6 +36,7 @@ training_params:
     iterations: 1000
     learning_rate: 0.1
     depth: 6
-metric_file_path: "models/metrics.json"
-local_model_save_path: "models/baseline_RF.pkl"
-model_s3_path: "s3://gisp/rosatom/ml_example/model/baseline_CB.pkl"
+transformer_path: "models/transformer.pkl"
+metric_file_path: "models/metrics_LR.json"
+local_model_save_path: "models/baseline_LR.pkl"
+model_s3_path: "s3://gisp/rosatom/ml_example/model/baseline_LR.pkl"

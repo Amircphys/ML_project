@@ -13,13 +13,13 @@ sklearn_models = Union[LogisticRegression, RandomForestClassifier]
 
 
 def model_predict(
-    features: np.array, model: Union[sklearn_models, CatBoostClassifier]
-) -> np.array:
-    if isinstance(model, sklearn_models):
-        predict = model.predict(features)
-    elif isinstance(model, CatBoostClassifier):
-        predict = model.predict(features)
-    return predict
+    features: list,
+    model: Union[sklearn_models, CatBoostClassifier],
+    predict_proba: bool = False,
+) -> list:
+    if predict_proba:
+        return model.predict_proba(features)
+    return model.predict(features)
 
 
 def evaluate_model(predict: list[float], target: list[float]) -> pd.DataFrame:

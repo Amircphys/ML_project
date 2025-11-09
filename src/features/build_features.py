@@ -1,6 +1,6 @@
-import os
 import numpy as np
 import pandas as pd
+import joblib
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.impute import SimpleImputer
@@ -35,6 +35,7 @@ def build_transformer(params: FeatureParams) -> ColumnTransformer:
         ],
         remainder="drop",
     )
+
     return transformer
 
 

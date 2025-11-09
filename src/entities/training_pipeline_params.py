@@ -6,6 +6,7 @@ from marshmallow_dataclass import class_schema
 import yaml
 from typing import List
 
+
 @dataclass
 class TrainingPipelineParams:
     project_name: str
@@ -18,6 +19,7 @@ class TrainingPipelineParams:
     splitting_params: SplittingParams
     feature_params: FeatureParams
     training_params: TrainingParams
+    transformer_path: str
     metric_file_path: str
     local_model_save_path: str
     model_s3_path: str
