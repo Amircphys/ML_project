@@ -4,7 +4,6 @@ RUN pip install -r requirements.txt
 COPY s3cfg /root/.s3cfg
 COPY .env ./
 COPY main.py ./main.py
-COPY transformer.pkl ./transformer.pkl
 
 WORKDIR .
 

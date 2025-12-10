@@ -63,7 +63,7 @@ class TestPridictEndpoint:
         with patch("online_inference.main.make_features") as mock_make_features, patch(
             "online_inference.main.predict_probs"
         ) as mock_model_predict:
-            mock_make_features.return_value = pd.DataFrame([[1, 2, 3, 4, 5]])
+            mock_make_features.return_value = ([0], pd.DataFrame([[1, 2, 3, 4, 5]]))
             mock_model_predict.return_value = [85.0]
             response = client.post("/predict/", json=sample_request_data)
 
@@ -83,7 +83,10 @@ class TestPridictEndpoint:
         with patch("online_inference.main.make_features") as mock_make_features, patch(
             "online_inference.main.predict_probs"
         ) as mock_model_predict:
-            mock_make_features.return_value = pd.DataFrame([[1, 2, 3, 4, 5]])
+            mock_make_features.return_value = (
+                [44, 45, 46],
+                pd.DataFrame([[1, 2, 3, 4, 5]]),
+            )
             mock_model_predict.return_value = [85.0, 91.2, 99.0]
             response = client.post(
                 "/predict/", json={"data": data, "features": FEATURES}
